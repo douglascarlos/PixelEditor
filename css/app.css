@@ -1,0 +1,35 @@
+header, main, footer {
+  	padding-left: 300px;
+}
+
+@media only screen and (max-width : 992px) {
+  	header, main, footer {
+		padding-left: 0;
+  	}
+}
+
+.page-title{
+	font-size: 30px;
+}
+
+.collapsible-body {
+	padding: 0 !important;
+}
+
+.ul-options li {
+	cursor: pointer;
+}
+
+#nav-mobile li.search {
+    position: relative;
+    left: 0;
+    right: 0;
+    margin-top: 1px;
+    padding: 1px 0 0 0;
+    z-index: 2;
+}
+
+#nav-mobile li.search .search-wrapper {
+    margin: 0 12px;
+    transition: margin .25s ease;
+}

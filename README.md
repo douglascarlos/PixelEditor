@@ -1,0 +1,2 @@
+# PixelEditor
+Projeto acadêmico

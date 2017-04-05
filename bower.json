@@ -1,0 +1,21 @@
+{
+  "name": "pdi",
+  "authors": [
+    "douglascarlos <dnevescarlos@gmail.com>"
+  ],
+  "description": "Academic project",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "materialize": "^0.98.1"
+  }
+}

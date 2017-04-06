@@ -33,3 +33,7 @@ header, main, footer {
     margin: 0 12px;
     transition: margin .25s ease;
 }
+
+#original canvas, #result canvas{
+  padding: 10px;
+}

@@ -1,0 +1,28 @@
+{
+  "name": "pixel-editor-project",
+  "version": "1.0.0",
+  "description": "Pixel Editor",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/douglascarlos/PixelEditor.git"
+  },
+  "keywords": [
+    "Image",
+    "Editor",
+    "Javascript"
+  ],
+  "author": "Douglas Carlos",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/douglascarlos/PixelEditor/issues"
+  },
+  "homepage": "https://github.com/douglascarlos/PixelEditor#readme",
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "materialize-css": "^0.98.1"
+  }
+}

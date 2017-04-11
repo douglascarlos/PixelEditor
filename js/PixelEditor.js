@@ -17,9 +17,10 @@ var PixelEditor = {
 		this.PIXEL_LENGTH = 4;
 		this.WHITE_PIXEL = [255, 255, 255, 255];
 		this.BLACK_PIXEL = [0, 0, 0, 255];
-		this.RED_ADDITIONAL = 0.2126;
-		this.GREEN_ADDITIONAL = 0.7152;
-		this.BLUE_ADDITIONAL = 0.0722;
+		
+		this.RED_ADDITIONAL = 0.2125;
+		this.GREEN_ADDITIONAL = 0.7154;
+		this.BLUE_ADDITIONAL = 0.0721;
 
 		// Properties for cache
 		this._cacheObj = null;
@@ -186,6 +187,7 @@ var PixelEditor = {
 			increase_decrease: 'increase_decrease',
 			mirror: 'mirror',
 			rotate_180_clockwise: 'rotate180Clockwise',
+			grayscale: 'grayscale',
 		};
 
 		this._currentActionName = str;
@@ -500,6 +502,34 @@ var PixelEditor = {
 		return true;
 	},
 
+	grayscale: function(){
+		var imgData = this.getPreviewImageData(),
+			newImgData = this._getGrayscaleImageData(imgData),
+			canvas = this._createCanvasFromImageData(newImgData);
+		this._replaceResultContent(canvas);
+	},
+
+	_getGrayscaleImageData: function(imgData){
+		var newImgData = this.previewContext.createImageData(imgData);
+
+		this.forEachPixel(imgData, function(pixel, _, __, index){
+			var colorValue = this.getGrayscaleOf(pixel);
+			for(var len = 3; len--;)
+				pixel[len] = colorValue;
+			this.setPixel(newImgData, index, pixel);
+		});
+
+		return newImgData;
+	},
+
+	getGrayscaleOf: function(pixel){
+		return Math.round(
+			pixel[0] * this.RED_ADDITIONAL + 
+			pixel[1] * this.GREEN_ADDITIONAL + 
+			pixel[2] * this.BLUE_ADDITIONAL
+			);
+	},
+
 
 	// Métodos de interação com objetos ImageData
 
@@ -552,10 +582,6 @@ var PixelEditor = {
 		return Math.round((pixel[0] + pixel[1] + pixel[2]) / 3);
 	},
 
-	getGrayscaleOf: function(pixel){
-		return Math.round(pixel[0] * this.RED_ADDITIONAL + pixel[1] * this.GREEN_ADDITIONAL + pixel[2] * this.BLUE_ADDITIONAL);
-	},
-
 	setPixel: function(imgData, offset, pixel){
 		// Replaces the pixel at the right index of the ImageData object
 		for(var data = imgData.data, len = pixel.length; len--;)
@@ -564,20 +590,6 @@ var PixelEditor = {
 
 	setPixelAt: function(imgData, x, y, pixel){
 		this.setPixel(imgData, pixel.length * (y * imgData.width + x), pixel);
-	},
-
-	_getGrayscaleImageData: function(imgData){
-		console.log('_getGrayscaleImageData');
-		var newImgData = this.previewContext.createImageData(imgData);
-
-		this.forEachPixel(imgData, function(pixel, _, __, index){
-			var colorValue = this.getGrayscaleOf(pixel);
-			for(var len = 3; len--;)
-				pixel[len] = colorValue;
-			this.setPixel(newImgData, index, pixel);
-		});
-
-		return newImgData;
 	},
 
 	_isGrayscale: function(imageData){

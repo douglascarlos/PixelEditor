@@ -173,7 +173,6 @@ var PixelEditor = {
 	// Métodos da aplicação
 
 	execute: function(str, value){
-		console.log('execute');
 		this._enableLoader();
 
 		var methods = {
@@ -188,6 +187,7 @@ var PixelEditor = {
 			mirror: 'mirror',
 			rotate_180_clockwise: 'rotate180Clockwise',
 			grayscale: 'grayscale',
+			extract_noises: 'extractNoises',
 		};
 
 		this._currentActionName = str;
@@ -528,6 +528,10 @@ var PixelEditor = {
 			pixel[1] * this.GREEN_ADDITIONAL + 
 			pixel[2] * this.BLUE_ADDITIONAL
 			);
+	},
+
+	extractNoises: function(){
+		console.log('extrair ruidos')
 	},
 
 

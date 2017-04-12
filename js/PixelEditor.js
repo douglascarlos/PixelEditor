@@ -183,7 +183,7 @@ var PixelEditor = {
 			greater_avg_white: 'paintWhiteGreaterAvg',
 			lesser_median_0_and_greater_avg_255: 'paintBlackLesserMedianAndPaintWhiteGreaterAvg',
 			translate: 'translate',
-			increase_decrease: 'increase_decrease',
+			increase_decrease: 'increaseAndDecrease',
 			mirror: 'mirror',
 			rotate_180_clockwise: 'rotate180Clockwise',
 			grayscale: 'grayscale',
@@ -393,7 +393,7 @@ var PixelEditor = {
 
 	},
 
-	increase_decrease: function(){
+	increaseAndDecrease: function(){
 		var percentage = parseInt(document.getElementById('increase_decrease_percentage').value);
 		var type = document.getElementById('increase_decrease_type').value;
 		var isIncrease = type === 'A';
@@ -531,7 +531,55 @@ var PixelEditor = {
 	},
 
 	extractNoises: function(){
-		console.log('extrair ruidos')
+		var imgData = this.getPreviewImageData();
+		imgData = this._applyGaussianFilter(imgData);
+		var canvas = this._createCanvasFromImageData(imgData);
+		this._replaceResultContent(canvas);
+	},
+
+	_applyGaussianFilter: function(imgData){
+		return this._applyConvolution(imgData, 3, function(matrix){
+			return [0, 255, 0, 255];
+		});
+	},
+
+	_applyConvolution: function(imgData, order, callback){
+		var newImgData = this.previewContext.createImageData(imgData),
+
+			data = imgData.data,
+			newData = new Uint8ClampedArray(data),
+			width = imgData.width,
+			height = imgData.height,
+			halfOrder = Math.floor(order / 2),
+
+			maxWidth = width - halfOrder,
+			maxHeight = height - halfOrder;
+
+		for(var y = 0, offset = 0, pixel; y < height; y++){
+			for(var x = 0; x < width; x++, offset += this.PIXEL_LENGTH){
+
+				// Se o pixel não estiver nas bordas, realiza a convolução
+				if(x >= halfOrder && y >= halfOrder && x < maxWidth && y < maxHeight){
+					var matrix = [];
+
+					for(var x1 = 0; x1 < order; x1++){
+						matrix[x1] = [];
+
+						for(var y1 = 0; y1 < order; y1++){
+							var currentOffset = ((y + y1 - halfOrder) * width + (x + x1 - halfOrder)) * this.PIXEL_LENGTH;
+							matrix[x1][y1] = data.subarray(currentOffset, currentOffset + this.PIXEL_LENGTH);
+						}
+					}
+
+					pixel = callback.call(this, matrix);
+					for(var len = pixel.length; len--;)
+						newData[offset + len] = pixel[len];
+				}
+			}
+		}
+
+		this.setPixel(newImgData, 0, newData);
+		return newImgData;
 	},
 
 

@@ -17,9 +17,7 @@
     
 <header>
     <nav class="top-nav green">
-        <div class="container">
-            <div class="nav-wrapper"><a class="page-title">Pixel Editor</a></div>
-        </div>
+        <div id="div_logo" class="nav-wrapper"><a class="page-title">Pixel Editor</a></div>
     </nav>
     <div class="container"><a href="#" data-activates="nav-mobile" class="button-collapse top-nav full hide-on-large-only"><i class="material-icons">menu</i></a></div>
     <ul id="nav-mobile" class="side-nav fixed">  
@@ -36,13 +34,48 @@
                 </div>
             </div>
         </li>
-        <li id="operations" class="hide">
+        <!-- <li id="operations" class="hide"> -->
+        <li id="operations">
             <ul class="collapsible collapsible-accordion">
                 <li class="bold">
-                    <a data-action="mirror" class="trigger collapsible-header waves-effect waves-green">Espelhamento</a>
+                    <a data-action="greater_150_avg" class="trigger collapsible-header waves-effect waves-green">
+                        Maior que 150 recebe a Média
+                    </a>
                 </li>
                 <li class="bold">
-                    <a data-action="grayscale" class="trigger collapsible-header waves-effect waves-green">Tonalidades de Cinza</a>
+                    <a data-action="greater_150_median" class="trigger collapsible-header waves-effect waves-green">
+                        Maior que 150 recebe a Mediana
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="greater_150_modes" class="trigger collapsible-header waves-effect waves-green">
+                        Maior que a Moda recebe a Moda
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="greater_avg_white" class="trigger collapsible-header waves-effect waves-green">
+                        Maior que a Média recebe Branco
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="lesser_median_0_and_greater_avg_255" class="trigger collapsible-header waves-effect waves-green">
+                        Menor que Mediana recebe 0 e maior que Média recebe 255
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="mirror" class="trigger collapsible-header waves-effect waves-green">
+                        Espelhamento
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="rotate_180_clockwise" class="trigger collapsible-header waves-effect waves-green">
+                        Rotacionar 180º Sentido Horário
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="grayscale" class="trigger collapsible-header waves-effect waves-green">
+                        Tonalidades de Cinza
+                    </a>
                 </li>
                 <li class="bold">
                     <a class="collapsible-header waves-effect waves-green">Filtros</a>

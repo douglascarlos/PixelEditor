@@ -1,15 +1,24 @@
 header, main, footer {
-  	padding-left: 300px;
+  	padding-left: 450px;
 }
 
 @media only screen and (max-width : 992px) {
   	header, main, footer {
 		padding-left: 0;
   	}
+
+    .page-title{
+        margin-left: 0;
+    }
+
+    #div_logo{
+        text-align: center;
+    }
 }
 
 .page-title{
 	font-size: 30px;
+    margin-left: 3%;
 }
 
 .collapsible-body {
@@ -35,5 +44,5 @@ header, main, footer {
 }
 
 #original canvas, #result canvas{
-  padding: 10px;
+    padding: 10px;
 }

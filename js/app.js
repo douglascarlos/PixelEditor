@@ -7,7 +7,7 @@ PixelEditor.init({
 });
 
 $(".button-collapse").sideNav({
-    menuWidth: 400,
+    menuWidth: 450,
 });
 
 $(document).ready(function(){

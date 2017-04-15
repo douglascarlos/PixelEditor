@@ -177,15 +177,18 @@ var PixelEditor = {
 
 		var methods = {
 			display_info: 'displayInfo',
+			
 			greater_150_avg: 'paintAvgGreater150',
 			greater_150_median: 'paintMedianGreater150',
 			greater_150_modes: 'paintModesGreater150',
 			greater_avg_white: 'paintWhiteGreaterAvg',
 			lesser_median_0_and_greater_avg_255: 'paintBlackLesserMedianAndPaintWhiteGreaterAvg',
+			
 			translate: 'translate',
 			increase_decrease: 'increaseAndDecrease',
 			mirror: 'mirror',
 			rotate_180_clockwise: 'rotate180Clockwise',
+			
 			grayscale: 'grayscale',
 			extract_noises: 'extractNoises',
 		};

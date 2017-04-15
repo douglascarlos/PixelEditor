@@ -61,6 +61,17 @@
                     </a>
                 </li>
                 <li class="bold">
+                    <a id="menu_increase_decrease" class="collapsible-header waves-effect waves-green"><!-- <i class="material-icons left">more</i>  -->Aumentar e Diminuir</a>
+                    <div class="collapsible-body">
+                        <input id="increase_decrease_percentage" type="number" min="0" value="0" />
+                        <label for="increase_decrease_percentage">Porcentagem</label>
+                        <input id="increase_decrease_type" type="text" value="A" />
+                        <label for="increase_decrease_type">Tipo</label>
+                        <br>
+                        <button data-action="increase_decrease" type="button" class="btn trigger">Aplicar</button>
+                    </div>
+                </li>
+                <li class="bold">
                     <a id="menu_translate" class="collapsible-header waves-effect waves-green"><!-- <i class="material-icons left">more</i>  -->Translação</a>
                     <div class="collapsible-body">
                         <input id="translate_size" type="number" min="0" value="0" />

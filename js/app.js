@@ -28,5 +28,5 @@ function handleClickMenuTranslate(){
 
 function handleClickMenuIncreaseAndDecrease(){
 	document.getElementById('increase_decrease_percentage').value = '0';
-	document.getElementById('increase_decrease_type').value = 'A';
+	document.getElementById('increase_decrease_type').value = 'I';
 }

@@ -399,7 +399,7 @@ var PixelEditor = {
 	increaseAndDecrease: function(){
 		var percentage = parseInt(document.getElementById('increase_decrease_percentage').value);
 		var type = document.getElementById('increase_decrease_type').value;
-		var isIncrease = type === 'A';
+		var isIncrease = type === 'I';
 		
 		if(isIncrease){
 			percentage = 1 + (percentage / 100);

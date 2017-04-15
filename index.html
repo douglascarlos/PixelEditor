@@ -34,37 +34,20 @@
                 </div>
             </div>
         </li>
-        <!-- <li id="operations" class="hide"> -->
-        <li id="operations">
+        <li id="operations" class="hide">
+        <!-- <li id="operations"> -->
             <ul class="collapsible collapsible-accordion">
                 <li class="bold">
-                    <a data-action="greater_150_avg" class="trigger collapsible-header waves-effect waves-green">
-                        Maior que 150 recebe a Média
-                    </a>
+                    <a class="collapsible-header waves-effect waves-green"><!-- <i class="material-icons left">more</i>  -->Filtros</a>
+                    <div class="collapsible-body">
+                        <ul class="ul-options">
+                            <li><a class="trigger" data-action="extract_noises">Extração de Ruídos</a></li>
+                        </ul>
+                    </div>
                 </li>
                 <li class="bold">
-                    <a data-action="greater_150_median" class="trigger collapsible-header waves-effect waves-green">
-                        Maior que 150 recebe a Mediana
-                    </a>
-                </li>
-                <li class="bold">
-                    <a data-action="greater_150_modes" class="trigger collapsible-header waves-effect waves-green">
-                        Maior que a Moda recebe a Moda
-                    </a>
-                </li>
-                <li class="bold">
-                    <a data-action="greater_avg_white" class="trigger collapsible-header waves-effect waves-green">
-                        Maior que a Média recebe Branco
-                    </a>
-                </li>
-                <li class="bold">
-                    <a data-action="lesser_median_0_and_greater_avg_255" class="trigger collapsible-header waves-effect waves-green">
-                        Menor que Mediana recebe 0 e maior que Média recebe 255
-                    </a>
-                </li>
-                <li class="bold">
-                    <a data-action="mirror" class="trigger collapsible-header waves-effect waves-green">
-                        Espelhamento
+                    <a data-action="grayscale" class="trigger collapsible-header waves-effect waves-green">
+                        Tonalidades de Cinza
                     </a>
                 </li>
                 <li class="bold">
@@ -73,17 +56,45 @@
                     </a>
                 </li>
                 <li class="bold">
-                    <a data-action="grayscale" class="trigger collapsible-header waves-effect waves-green">
-                        Tonalidades de Cinza
+                    <a data-action="mirror" class="trigger collapsible-header waves-effect waves-green">
+                        Espelhamento
                     </a>
                 </li>
                 <li class="bold">
-                    <a class="collapsible-header waves-effect waves-green">Filtros</a>
+                    <a id="menu_translate" class="collapsible-header waves-effect waves-green"><!-- <i class="material-icons left">more</i>  -->Translação</a>
                     <div class="collapsible-body">
-                        <ul class="ul-options">
-                            <li><a class="trigger" data-action="extract_noises">Extração de Ruídos</a></li>
-                        </ul>
+                        <input id="translate_size" type="number" min="0" value="0" />
+                        <label for="translate_size">Quantidade (px)</label>
+                        <input id="translate_direction" type="text" value="H" />
+                        <label for="translate_direction">Direção</label>
+                        <br>
+                        <button data-action="translate" type="button" class="btn trigger">Aplicar</button>
                     </div>
+                </li>
+                <li class="bold">
+                    <a data-action="lesser_median_0_and_greater_avg_255" class="trigger collapsible-header waves-effect waves-green">
+                        Menor que Mediana recebe 0 e maior que Média recebe 255
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="greater_avg_white" class="trigger collapsible-header waves-effect waves-green">
+                        Maior que a Média recebe Branco
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="greater_150_modes" class="trigger collapsible-header waves-effect waves-green">
+                        Maior que a Moda recebe a Moda
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="greater_150_median" class="trigger collapsible-header waves-effect waves-green">
+                        Maior que 150 recebe a Mediana
+                    </a>
+                </li>
+                <li class="bold">
+                    <a data-action="greater_150_avg" class="trigger collapsible-header waves-effect waves-green">
+                        Maior que 150 recebe a Média
+                    </a>
                 </li>
             </ul>
         </li>
@@ -100,7 +111,7 @@
                         <div id="original"></div>
                     </div>
                     <div class="card-content">
-                        <span class="card-title activator grey-text text-darken-4">Imagem Original<i class="material-icons right">more_vert</i></span>
+                        <span class="card-title activator grey-text text-darken-4">Imagem Original<i class="material-icons right">more</i></span>
                     </div>
                     <div class="card-reveal">
                         <span class="card-title grey-text text-darken-4">Imagem Original<i class="material-icons right">close</i></span>
@@ -114,7 +125,7 @@
                         <div id="result"></div>
                     </div>
                     <div class="card-content">
-                        <span class="card-title activator grey-text text-darken-4">Resultado<i class="material-icons right">more_vert</i></span>
+                        <span class="card-title activator grey-text text-darken-4">Resultado<i class="material-icons right">more</i></span>
                     </div>
                     <div class="card-reveal">
                         <span class="card-title grey-text text-darken-4">Resultado<i class="material-icons right">close</i></span>

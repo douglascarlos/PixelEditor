@@ -86,6 +86,7 @@ var PixelEditor = {
 		this.html.operations.classList.remove('hide');
 		this.html.original.parentElement.parentElement.classList.remove('hide')
 		this.html.result.innerHTML = '';
+		this.html.result.parentElement.parentElement.classList.add('hide');
 
 		this._cacheObj = {};
 	},
@@ -96,7 +97,7 @@ var PixelEditor = {
 		this.html.result.innerHTML = '';
 		if(element){
 			this.html.result.appendChild(element);
-			this.html.result.parentElement.parentElement.classList.remove('hide')
+			this.html.result.parentElement.parentElement.classList.remove('hide');
 		}
 	},
 

@@ -544,7 +544,20 @@ var PixelEditor = {
 
 	_applyGaussianFilter: function(imgData){
 		return this._applyConvolution(imgData, 3, function(matrix){
-			return [0, 255, 0, 255];
+			var multiple = 1 / 16;
+			var kernel = [ 	
+							[1, 2, 1],
+							[2, 4, 2],
+							[1, 2, 1] 
+						];
+
+			for(var x = 0, len = matrix.length; x < len; x++){
+				for(var y = 0; y < len; y++){
+					var pixelValue = matrix[x][y][0];
+				}
+			}
+			
+			return [matrix[0][1][0], matrix[0][1][1], matrix[0][1][2], matrix[0][1][3]];
 		});
 	},
 

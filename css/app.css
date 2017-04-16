@@ -22,8 +22,12 @@ header, main, footer {
 }
 
 .collapsible-body {
-	padding: 10px !important;
+	padding: 0px;
     background-color: transparent !important;
+}
+
+.collapsible-body.with-parameters {
+    padding: 0 16px !important;
 }
 
 .ul-options li {

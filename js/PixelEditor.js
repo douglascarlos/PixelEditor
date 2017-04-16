@@ -218,28 +218,29 @@ var PixelEditor = {
 			fragment = document.createDocumentFragment(),
 			list = this._create('ul');
 
-		//===list.classList.add('featured-box');
+		list.classList.add('featured-box');
 		fragment.appendChild(list);
 
-		var refLi = this._create('li', '<strong>Histograma da imagem:</strong>', list);
+		var refLi = this._create('li', '<strong>Histograma da Imagem:</strong>', list);
 		refLi.appendChild(this._getHistogramComponent(obj.histogram));
 
 		var leftPixelsAvg = this._average(leftPixels);
-		this._create('li', '<strong>Média das tonalidades de cinza da metade esquerda da imagem:</strong> ' + leftPixelsAvg.toFixed(2), list);
+		this._create('li', '<strong>Média das tonalidades de cinza da metade esquerda da imagem:</strong><br>' + leftPixelsAvg.toFixed(2), list);
 
 		var rightPixelsMedian = this._median(rightPixels);
-		this._create('li', '<strong>Mediana das tonalidades de cinza da metade direita da imagem:</strong> ' + rightPixelsMedian.toFixed(2), list);
+		this._create('li', '<strong>Mediana das tonalidades de cinza da metade direita da imagem:</strong><br>' + rightPixelsMedian.toFixed(2), list);
 
 		var modes = this._getModesFromHistogram(obj.histogramBottomMainDiagonal),
-		tmpStr = '<strong>Moda das tonalidades de cinza da parte abaixo da diagonal principal da imagem:</strong> ' + modes.join(', ');
+		tmpStr = '<strong>Moda das tonalidades de cinza da parte abaixo da diagonal principal da imagem:</strong><br>' + modes.join(', ');
 		tmpStr += ' (' + obj.histogramBottomMainDiagonal[modes[0]] + ' aparições)';
 		this._create('li', tmpStr, list);
 
 		var variance = this._variance(obj.allPixels);
-		this._create('li', '<strong>Variância das tonalidades de cinza de toda a imagem:</strong> ' + variance.toFixed(2), list);
+		this._create('li', '<strong>Variância das tonalidades de cinza de toda a imagem:</strong><br>' + variance.toFixed(2), list);
 
-		result.innerHTML = '';
-		result.appendChild(fragment);
+		//result.innerHTML = '';
+		//result.appendChild(fragment);
+		this._replaceResultContent(fragment);
 	},
 
 	paintAvgGreater150: function(){

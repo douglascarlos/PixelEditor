@@ -47,3 +47,47 @@ header, main, footer {
 #original canvas, #result canvas{
     padding: 10px;
 }
+
+.featured-box{
+    padding: 10px !important;
+    background: #FFF;
+}
+
+#result .histogram{
+    position: relative;
+    width: 512px;
+    height: 256px;
+    border: 1px solid #333;
+}
+#result .histogram span{
+    position: absolute;
+    z-index: 1;
+    padding: 5px;
+    font-size: 13px;
+    line-height: 1;
+    background: rgba(0, 0, 0, .5);
+    color: #FFF;
+    text-shadow: 0 0 4px #000;
+}
+#result .histogram .histogram-min-x, #result .histogram .histogram-max-x{
+    bottom: 0;
+}
+#result .histogram .histogram-min-x{
+    left: 0;    
+}
+#result .histogram .histogram-max-x{
+    right: 0;
+}
+#result .histogram .histogram-min-y{
+    display: none;
+}
+#result .histogram .histogram-max-y{
+    top: 0;
+    left: 0;
+}
+#result .histogram .histogram-point{
+    position: absolute;
+    bottom: 0;
+    width: 2px;
+    background: #333;
+}

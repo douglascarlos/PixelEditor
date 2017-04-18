@@ -34,6 +34,18 @@ header, main, footer {
 	cursor: pointer;
 }
 
+#nav-mobile{
+    overflow-y: scroll;   
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+}
+
 #nav-mobile li.search {
     position: relative;
     left: 0;

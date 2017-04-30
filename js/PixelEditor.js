@@ -52,10 +52,6 @@ var PixelEditor = {
 		fragment.appendChild(this.html.preview);
 		this.previewContext = this.html.preview.getContext('2d');
 
-		//====this.html.result = this._create('div');
-		//====this.html.result.classList.add('result');
-		//====fragment.appendChild(this.html.result);
-
 		this.html.original.appendChild(fragment);
 	},
 
@@ -76,7 +72,6 @@ var PixelEditor = {
 		console.log('loadedImage');
 		var preview = this.html.preview;
 
-		//====preview.classList.add('active');
 		preview.width = image.width;
 		preview.height = image.height;
 
@@ -144,7 +139,6 @@ var PixelEditor = {
 		var fragment = document.createDocumentFragment(),
 			canvas = this._create('canvas', null, fragment);
 
-		//====canvas.classList.add('active');
 		canvas.width = imgData.width;
 		canvas.height = imgData.height;
 		canvas.getContext('2d').putImageData(imgData, 0, 0);
@@ -543,21 +537,25 @@ var PixelEditor = {
 	},
 
 	_applyGaussianFilter: function(imgData){
+		imgData = this._getGrayscaleImageData(imgData);
 		return this._applyConvolution(imgData, 3, function(matrix){
-			var multiple = 1 / 16;
+			var multiple = 1/16;
 			var kernel = [ 	
 							[1, 2, 1],
 							[2, 4, 2],
 							[1, 2, 1] 
 						];
-
+			var newValue = 0;
 			for(var x = 0, len = matrix.length; x < len; x++){
+				
 				for(var y = 0; y < len; y++){
 					var pixelValue = matrix[x][y][0];
+					var kernelValue = kernel[x][y];
+					newValue += pixelValue * kernelValue;
 				}
 			}
-			
-			return [matrix[0][1][0], matrix[0][1][1], matrix[0][1][2], matrix[0][1][3]];
+			newValue = newValue * multiple;
+			return [newValue, newValue, newValue, 255];
 		});
 	},
 

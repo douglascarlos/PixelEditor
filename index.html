@@ -63,22 +63,36 @@
                 <li class="bold">
                     <a id="menu_increase_decrease" class="collapsible-header waves-effect waves-green"><!-- <i class="material-icons left">more</i>  -->Aumentar e Diminuir</a>
                     <div class="collapsible-body with-parameters">
-                        <input id="increase_decrease_percentage" type="number" min="0" value="0" />
-                        <label for="increase_decrease_percentage">Porcentagem</label>
-                        <input id="increase_decrease_type" type="text" value="I" />
-                        <label for="increase_decrease_type">Tipo</label>
-                        <br>
+                        <div class="input-field col s12">
+                            <select id="increase_decrease_type">
+                                <option value="" disabled selected>Escolha sua opção</option>
+                                <option value="I">Aumentar</option>
+                                <option value="D">Diminuir</option>
+                            </select>
+                            <label>Ação</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input id="increase_decrease_percentage" type="number" min="0" value="0" />
+                            <label for="increase_decrease_percentage">Porcentagem</label>
+                        </div>
                         <button data-action="increase_decrease" type="button" class="btn trigger">Aplicar</button>
                     </div>
                 </li>
                 <li class="bold">
                     <a id="menu_translate" class="collapsible-header waves-effect waves-green"><!-- <i class="material-icons left">more</i>  -->Translação</a>
                     <div class="collapsible-body with-parameters">
-                        <input id="translate_size" type="number" min="0" value="0" />
-                        <label for="translate_size">Quantidade (px)</label>
-                        <input id="translate_direction" type="text" value="H" />
-                        <label for="translate_direction">Direção</label>
-                        <br>
+                        <div class="input-field col s12">
+                            <select id="translate_direction">
+                                <option value="" disabled selected>Escolha sua opção</option>
+                                <option value="H">Horizontal</option>
+                                <option value="V">Vertical</option>
+                            </select>
+                            <label>Direção</label>
+                        </div>
+                        <div class="input-field col s12">
+                            <input id="translate_size" type="number" min="0" value="0" />
+                            <label for="translate_size">Quantidade (px)</label>
+                        </div>
                         <button data-action="translate" type="button" class="btn trigger">Aplicar</button>
                     </div>
                 </li>

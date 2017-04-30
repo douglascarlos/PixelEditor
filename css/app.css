@@ -27,7 +27,7 @@ header, main, footer {
 }
 
 .collapsible-body.with-parameters {
-    padding: 0 16px !important;
+    padding: 10px 16px !important;
 }
 
 .ul-options li {
@@ -106,4 +106,9 @@ header, main, footer {
     bottom: 0;
     width: 2px;
     background: #333;
+}
+
+.with-parameters label{
+    left: 0 !important;
+    line-height: 1 !important;
 }

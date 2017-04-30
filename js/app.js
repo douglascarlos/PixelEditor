@@ -3,8 +3,7 @@ PixelEditor.init({
     input: document.getElementById('file-load'),
     operations: document.getElementById('operations'),
     original: document.getElementById('original'),
-    result: document.getElementById('result'),
-    loader: document.getElementById('loader'),
+    result: document.getElementById('result')
 });
 
 $(document).ready(init);

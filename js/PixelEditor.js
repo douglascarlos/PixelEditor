@@ -11,8 +11,7 @@ var PixelEditor = {
 			input: args.input,
 			operations: args.operations,
 			original: args.original,
-			result: args.result,
-			loader: args.loader
+			result: args.result
 		};
 
 		this.PIXEL_LENGTH = 4;

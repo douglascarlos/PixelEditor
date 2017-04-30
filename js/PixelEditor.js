@@ -11,7 +11,8 @@ var PixelEditor = {
 			input: args.input,
 			operations: args.operations,
 			original: args.original,
-			result: args.result
+			result: args.result,
+			loader: args.loader
 		};
 
 		this.PIXEL_LENGTH = 4;
@@ -146,16 +147,6 @@ var PixelEditor = {
 		return fragment;
 	},
 
-	_enableLoader: function(){
-		console.log('_enableLoader');
-		//====this.html.content.classList.add('processing');
-	},
-
-	_disableLoader: function(){
-		console.log('_disableLoader');
-		//=====this.html.content.classList.remove('processing');
-	},
-
 	_cacheFunctionReturn: function(callback){
 		console.log('_cacheFunctionReturn');
 		var str = this._currentActionName;
@@ -168,7 +159,6 @@ var PixelEditor = {
 	// Métodos da aplicação
 
 	execute: function(str, value){
-		this._enableLoader();
 
 		var methods = {
 			display_info: 'displayInfo',
@@ -192,7 +182,6 @@ var PixelEditor = {
 
 		setTimeout(function(){
 			PixelEditor[methods[str]](value);
-			PixelEditor._disableLoader();
 		}, 0);
 	},
 

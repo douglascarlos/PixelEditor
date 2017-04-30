@@ -4,6 +4,7 @@ PixelEditor.init({
     operations: document.getElementById('operations'),
     original: document.getElementById('original'),
     result: document.getElementById('result'),
+    loader: document.getElementById('loader'),
 });
 
 $(document).ready(init);

@@ -174,7 +174,9 @@ var PixelEditor = {
 			rotate_180_clockwise: 'rotate180Clockwise',
 			
 			grayscale: 'grayscale',
+
 			extract_noises: 'extractNoises',
+			edge_detection: 'applyKirschMask',
 		};
 
 		this._currentActionName = str;
@@ -522,6 +524,94 @@ var PixelEditor = {
 		imgData = this._applyGaussianFilter(imgData);
 		var canvas = this._createCanvasFromImageData(imgData);
 		this._replaceResultContent(canvas);
+	},
+
+	applyKirschMask: function(){
+		var imgData = this._cacheFunctionReturn(function(){
+
+			var imgData = this.getPreviewImageData(),
+				kernel = [
+					[5, -3, -3],
+					[5, 0, -3],
+					[5, -3, -3]
+				],
+				kernels = [],
+				zeroFilledArr = [],
+				kernelLen = kernel.length,
+				kernelOrder = Math.pow(kernelLen, 2),
+				middleIndex = Math.floor(kernelOrder / 2);
+
+			// Gerando os kernels necessários para a convolução
+			for(var len = 8; len--;){
+				var kernelCopy = JSON.parse(JSON.stringify(kernel));
+
+				for(var len1 = kernelOrder; len1--;){
+					if(len1 == middleIndex)
+						continue;
+
+					var distanceToMiddle = middleIndex - len1,
+						addValue = Math.abs(distanceToMiddle) > 2 ? 1 : kernelLen,
+						factor = (addValue == 1 && distanceToMiddle > 0) || (addValue == kernelLen && len1 % kernelLen > kernelLen / 2) ? 1 : -1,
+						newIndex = (len1 + addValue * factor) % kernelOrder;
+
+					kernelCopy[Math.floor(newIndex / kernelLen)][newIndex % kernelLen] = kernel[Math.floor(len1 / kernelLen)][len1 % kernelLen];
+				}
+
+				kernel = kernelCopy;
+				kernels.push(kernel);
+				zeroFilledArr.push(0);
+			}
+
+			if(!this._isGrayscale(imgData))
+				imgData = this._getGrayscaleImageData(imgData);
+			imgData = this._applyMedianFilter(imgData);
+
+			imgData = this._applyConvolution(imgData, kernelLen, function(matrix){
+				var localKernels = kernels,
+					all = zeroFilledArr.slice();
+
+				for(var x = 0, len = matrix.length; x < len; x++){
+					for(var y = 0; y < len; y++){
+						var pixelValue = matrix[x][y][0];
+						for(var z = localKernels.length; z--;)
+							all[z] += pixelValue * localKernels[z][x][y];
+					}
+				}
+
+				var value = Math.max.apply(Math, all);
+				return [value, value, value, 255];
+			});
+
+			return imgData;
+
+		});
+
+		var canvas = this._createCanvasFromImageData(imgData);
+		this._replaceResultContent(canvas);
+	},
+
+	_applyCustomThresholding: function(imageData, threshold){
+		var newImgData = this.previewContext.createImageData(imageData);
+
+		this.forEachPixel(imageData, function(pixel, _, __, index){
+			var newPixel = this[pixel[0] >= threshold ? 'WHITE_PIXEL' : 'BLACK_PIXEL'];
+			this.setPixel(newImgData, index, newPixel);
+		});
+
+		return newImgData;
+	},
+
+	_applyMedianFilter: function(imgData){
+		return this._applyConvolution(imgData, 3, function(matrix){
+			var arr = [];
+			for(var x = 0, len = matrix.length; x < len; x++){
+				for(var y = 0; y < len; y++)
+					arr[x * len + y] = matrix[x][y][0];
+			}
+
+			var median = this._median(arr);
+			return [median, median, median, 255];
+		});
 	},
 
 	_applyGaussianFilter: function(imgData){

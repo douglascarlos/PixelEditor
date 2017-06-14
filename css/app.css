@@ -112,3 +112,27 @@ header, main, footer {
     left: 0 !important;
     line-height: 1 !important;
 }
+
+
+
+.object-list, .object-list ul{
+    padding: 0;
+    list-style: none inside;
+    background: transparent;
+}
+.object-list > li{
+    border-top: 1px solid #333;
+    padding: 20px;
+    overflow: hidden;
+}
+.object-list > li:first-child{
+    border-top: none;
+}
+.object-list img{
+    float: left;
+    width: auto !important;
+}
+.object-list .info{
+    margin: 10px;
+    float: left;
+}

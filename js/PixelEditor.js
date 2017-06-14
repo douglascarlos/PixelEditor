@@ -177,6 +177,8 @@ var PixelEditor = {
 
 			extract_noises: 'extractNoises',
 			edge_detection: 'applyKirschMask',
+
+			extract_characteristics: 'extractCharacteristics'
 		};
 
 		this._currentActionName = str;
@@ -588,6 +590,272 @@ var PixelEditor = {
 
 		var canvas = this._createCanvasFromImageData(imgData);
 		this._replaceResultContent(canvas);
+	},
+
+	extractCharacteristics: function(){
+		var imgData = this.getPreviewImageData();
+		if(!this._isGrayscale(imgData)){
+			imgData = this._getGrayscaleImageData(imgData);
+		}
+
+		var objectData = this._getObjectData(imgData, 20);
+		var list = this._getObjectDisplayComponent(objectData);
+
+		this._replaceResultContent(list);
+	},
+
+	_getObjectData: function(imageData, colorInterval){
+		var data = imageData.data,
+			colorDistance = colorInterval / 2,
+			returnData = {
+				width: imageData.width,
+				height: imageData.height,
+				simpleMatrix: this._toSimpleMatrix(imageData), // Gera uma matriz de valores simples a partir do objeto ImageData
+
+				// Gera a matriz de referências do mesmo tamanho da imagem,
+				// preenchendo todos os seus pontos com referências nulas
+				referenceMatrix: this._createMatrixWithSize(imageData.width, imageData.height),
+
+				objects: []
+			};
+
+		for(var y = 0; y < returnData.height; y++){
+			for(var x = 0; x < returnData.width; x++){
+				// Se encontrar um ponto de referência nula,
+				// inicia o algoritmo flood fill a partir deste, gerando um novo objeto
+				if(returnData.referenceMatrix[y][x])
+					continue;
+
+				var object = {
+					limits: {
+						xAxis: [x, x],
+						yAxis: [y, y]
+					},
+					color: returnData.simpleMatrix[y][x],
+					pixelCount: 0
+				};
+				returnData.objects.push(object);
+
+				// Para evitar recursão (que seria excessiva em imagens maiores), cria um array temporário abaixo e
+				// o utiliza para armazenar todos os pixels encontrados a partir da cor do objeto.
+				// Através de subsequentes iterações, todos os pixels da região são encontrados
+				var currentPixels, foundPixels = [[x, y]];
+
+				while(foundPixels.length){
+					currentPixels = foundPixels;
+					foundPixels = [];
+
+					for(var len = currentPixels.length; len--;){
+						var tmp = currentPixels[len];
+						this._floodFillMatrix(returnData, object, tmp[0], tmp[1], foundPixels, colorDistance);
+					}
+				}
+			}
+		}
+
+		// Ordena os objetos encontrados de maneira decrescente, de acordo com a quantidade de pixels
+		returnData.objects.sort(function(a, b){
+			return b.pixelCount - a.pixelCount;
+		});
+
+		for(var len = returnData.objects.length; len--;)
+			this._prepareObject(returnData, returnData.objects[len], .2);
+
+		return returnData;
+	},
+
+	_toSimpleMatrix: function(imageData){
+		var matrix = [],
+			data = imageData.data,
+			width = imageData.width,
+			height = imageData.height;
+
+		for(var x = 0, offset = 0; x < height; x++){
+			matrix[x] = new Uint8ClampedArray(width);
+			for(var y = 0; y < width; y++, offset += this.PIXEL_LENGTH)
+				matrix[x][y] = data[offset];
+		}
+
+		return matrix;
+	},
+
+	_floodFillMatrix: function(data, object, x, y, pixels, colorDiff){
+		if(data.referenceMatrix[y][x])
+			return;
+
+		data.referenceMatrix[y][x] = object;
+		object.pixelCount++;
+
+		// Atualiza os limites da imagem
+		if(x < object.limits.xAxis[0])
+			object.limits.xAxis[0] = x;
+		else if(x > object.limits.xAxis[1])
+			object.limits.xAxis[1] = x;
+		if(y < object.limits.yAxis[0])
+			object.limits.yAxis[0] = y;
+		else if(y > object.limits.yAxis[1])
+			object.limits.yAxis[1] = y;
+
+		for(var num = 4, half = num / 2, len = num; len--;){
+			var factor = len >= half ? 1 : -1,
+				modulus = len % 2,
+				newX = x + modulus * factor,
+				newY = y + (1 - modulus) * factor;
+
+			if(
+				newX < data.width &&
+				newY < data.height &&
+				Math.min(newX, newY) >= 0 &&
+				Math.abs(data.simpleMatrix[newY][newX] - object.color) <= colorDiff
+			)
+				pixels.push([newX, newY]);
+		}
+	},
+
+	_prepareObject: function(data, object, alpha){
+		object.x = object.limits.xAxis[0];
+		object.y = object.limits.yAxis[0];
+		object.width = object.limits.xAxis[1] - object.limits.xAxis[0] + 1;
+		object.height = object.limits.yAxis[1] - object.limits.yAxis[0] + 1;
+
+		// Obtem uma coleção de coordenadas que contituem o perímetro da imagem
+		object.perimeter = this._getPerimeterArray(data, object);
+
+		// Prepara a imagem para ser exibida na interface
+		var imageData = new ImageData(object.width, object.height),
+			maxValue = 255;
+
+		if(alpha == null)
+			alpha = 1;
+		alpha *= maxValue;
+
+		for(var y = 0, offset = 0; y < object.height; y++){
+			var yAxis = object.y + y;
+
+			for(var x = 0; x < object.width; x++, offset += this.PIXEL_LENGTH){
+				var xAxis = object.x + x,
+					belongsToObj = data.referenceMatrix[yAxis][xAxis] == object,
+					color = data.simpleMatrix[yAxis][xAxis];
+
+				for(var len = 3; len--;)
+					imageData.data[offset + len] = color;
+
+				imageData.data[offset + 3] = belongsToObj ? maxValue : alpha;
+			}
+		}
+
+		// Verifica se o objeto apresenta um retângulo ou círculo
+		if(this._isRectangle(data, object))
+			object._isRectangle = true;
+		else if(this._isCircle(data, object))
+			object._isCircle = true;
+
+		object.imageData = imageData;
+	},
+
+	_getPerimeterArray: function(data, object){
+		for(var x = 0; x < object.width; x++){
+			var xAxis = x + object.x;
+
+			if(data.referenceMatrix[object.y][xAxis] == object){
+
+				var list = [],
+					first = [xAxis, object.y],
+					next = [first],
+					visitMatrix = this._createMatrixWithSize(data.width, data.height);
+
+				visitMatrix[first[1]][first[0]] = true;
+
+				for(var count = 0; count < next.length; count++){
+					var coord = next[count];
+					if(this._belongsToPerimeter(data, object, coord, next, visitMatrix))
+						list.push(coord);
+				}
+
+				return list;
+
+			}
+		}
+	},
+
+	_belongsToPerimeter: function(data, object, coord, next, visitMatrix){
+		//visitMatrix[coord[1]][coord[0]] = true;
+		var foundNeighbors = [];
+
+		for(var num = 4, half = num / 2, len = num; len--;){
+			var factor = len >= half ? 1 : -1,
+				modulus = len % 2,
+				newCoord = [coord[0] + modulus * factor, coord[1] + (1 - modulus) * factor];
+
+			if(
+				newCoord[0] < data.width &&
+				newCoord[1] < data.height &&
+				Math.min(newCoord[0], newCoord[1]) >= 0 &&
+				data.referenceMatrix[newCoord[1]][newCoord[0]] == object
+			)
+				foundNeighbors.push(newCoord);
+		}
+
+		var len = foundNeighbors.length;
+		for(;len--;){
+			var newCoord = foundNeighbors[len];
+			if(!visitMatrix[newCoord[1]][newCoord[0]]){
+				next.push(newCoord);
+				visitMatrix[newCoord[1]][newCoord[0]] = true;
+			}
+		}
+
+		return foundNeighbors.length < num;
+	},
+
+	_getObjectDisplayComponent: function(data){
+		var fragment = document.createDocumentFragment();
+		this._create('h2', 'Objetos identificados na imagem', fragment);
+		var list = this._create('ul', null, fragment);
+		list.classList.add('object-list');
+
+		for(var x = 0; x < data.objects.length; x++){
+			var object = data.objects[x],
+				li = this._create('li', null, list),
+				image = this._getImageFromDataObject(data, object, .2);
+
+			li.appendChild(image);
+
+			var infoElement = this._create('ul', null, li);
+			infoElement.classList.add('info');
+			this._create('li', '<strong>Largura:</strong> ' + object.width + 'px', infoElement);
+			this._create('li', '<strong>Altura:</strong> ' + object.height + 'px', infoElement);
+			this._create('li', '<strong>Área:</strong> ' + object.pixelCount + 'px', infoElement);
+
+			if(object._isRectangle){
+				this._create('li', '<strong>O objeto é um retângulo!</strong>', infoElement);
+				this._create('li', '<strong>Perímetro:</strong> ' + object.perimeter.length + 'px', infoElement);
+			}
+			else if(object._isCircle){
+				var perimeter = object.perimeter.length,
+					circularity = Math.pow(perimeter, 2) / (4 * Math.PI * object.pixelCount);
+
+				this._create('li', '<strong>O objeto é um círculo!</strong>', infoElement);
+				this._create('li', '<strong>Perímetro:</strong> ' + perimeter + 'px', infoElement);
+				var tmp =
+				this._create('li', '<strong>Circularidade:</strong> ' + circularity.toFixed(2), infoElement);
+			}
+		}
+
+		return fragment;
+	},
+
+	_getImageFromDataObject: function(data, object){
+		// Gera elemento de imagem a partir do objeto ImageData
+		var image = new Image(object.width, object.height),
+			canvas = this._create('canvas');
+
+		canvas.width = object.imageData.width;
+		canvas.height = object.imageData.height;
+		canvas.getContext('2d').putImageData(object.imageData, 0, 0);
+		image.src = canvas.toDataURL();
+
+		return image;
 	},
 
 	_applyCustomThresholding: function(imageData, threshold){

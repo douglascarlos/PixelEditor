@@ -146,3 +146,7 @@ div > .thumb > .value{
     right: -1px;
     bottom: 15px;
 }
+
+img{
+    background: url('../image/bg.jpg');
+}

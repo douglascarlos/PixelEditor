@@ -46,8 +46,17 @@
                     <div class="collapsible-body">
                         <ul class="ul-options">
                             <li><a class="trigger" data-action="extract_noises">Extração de Ruídos</a></li>
-                            <li><a class="trigger" data-action="edge_detection">Detecção de Bordas (Kirsch)</a></li>
+                            <li><a id="enable_edge_detection">Detecção de Bordas</a></li>
                         </ul>
+                    </div>
+                </li>
+                <li id="li_edge_detection" class="bold hide">
+                    <a id="menu_edge_detection" class="collapsible-header waves-effect waves-green">Máscara de Kirsch</a>
+                    <div class="collapsible-body with-parameters">
+                        <label>Thresholding</label>
+                        <div class="range-field">
+                            <input class="trigger" data-action="edge_detection" type="range" id="edge_detection_thresholding" min="0" max="255" />
+                        </div>
                     </div>
                 </li>
                 <li class="bold">

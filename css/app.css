@@ -136,3 +136,13 @@ header, main, footer {
     margin: 10px;
     float: left;
 }
+
+div > .thumb{
+    margin-left: -5px !important;
+}
+
+div > .thumb > .value{
+    position: relative;
+    right: -1px;
+    bottom: 15px;
+}

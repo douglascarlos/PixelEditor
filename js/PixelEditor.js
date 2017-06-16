@@ -529,6 +529,8 @@ var PixelEditor = {
 	},
 
 	applyKirschMask: function(){
+		var threshold_value = parseInt(document.getElementById('edge_detection_thresholding').value);
+		console.log('===='+threshold_value);
 		var imgData = this._cacheFunctionReturn(function(){
 
 			var imgData = this.getPreviewImageData(),
@@ -587,6 +589,8 @@ var PixelEditor = {
 			return imgData;
 
 		});
+		
+		imgData = this._applyCustomThresholding(imgData, threshold_value);
 
 		var canvas = this._createCanvasFromImageData(imgData);
 		this._replaceResultContent(canvas);
@@ -810,7 +814,7 @@ var PixelEditor = {
 
 	_getObjectDisplayComponent: function(data){
 		var fragment = document.createDocumentFragment();
-		this._create('h2', 'Objetos identificados na imagem', fragment);
+		this._create('h5', 'Objetos identificados na imagem', fragment);
 		var list = this._create('ul', null, fragment);
 		list.classList.add('object-list');
 

@@ -814,7 +814,9 @@ var PixelEditor = {
 
 	_getObjectDisplayComponent: function(data){
 		var fragment = document.createDocumentFragment();
-		this._create('h5', 'Objetos identificados na imagem', fragment);
+		var title = this._create('strong', 'Objetos identificados na imagem', fragment);
+		title.classList.add('title-object-list');
+
 		var list = this._create('ul', null, fragment);
 		list.classList.add('object-list');
 
